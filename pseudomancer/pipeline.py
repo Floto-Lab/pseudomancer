@@ -12,8 +12,7 @@ from .overlap import overlap_with_getorf
 
 
 def run_pseudomancer_pipeline(taxon: str, genome_file: str, output_dir: str, evalue: float = 1e-5, cluster: bool = False):
-    """
-    Run the complete pseudomancer pipeline with mmseqs2.
+    """Run the complete pseudomancer pipeline with mmseqs2.
     
     Parameters
     ----------
@@ -28,6 +27,7 @@ def run_pseudomancer_pipeline(taxon: str, genome_file: str, output_dir: str, eva
     cluster : bool
         Whether to cluster proteins (default: False)
     """
+    
     check_dependencies()
 
     # ORF identification in reference genome

@@ -9,8 +9,7 @@ import zipfile
 
 
 def download_ncbi_assemblies(taxon: str, output_dir: str) -> str:
-    """
-    Download NCBI RefSeq assemblies for a given taxon.
+    """Download NCBI RefSeq assemblies for a given taxon.
     
     Parameters
     ----------
@@ -24,6 +23,7 @@ def download_ncbi_assemblies(taxon: str, output_dir: str) -> str:
     str
         Path to the merged protein FASTA file
     """
+    
     taxon_name = taxon.replace(" ", "_")
     assemblies_dir = os.path.join(output_dir, f"{taxon_name.lower()}_assemblies")
     os.makedirs(assemblies_dir, exist_ok=True)

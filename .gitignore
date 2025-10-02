@@ -1,0 +1,6 @@
+docs/build/*
+docs/_build/*
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

@@ -47,3 +47,8 @@ ignore = [
 
 [tool.ruff.lint.isort]
 known-first-party = ["pseudomancer"]
+
+[tool.pytest.ini_options]
+markers = [
+    "online: tests that hit external APIs (disabled by default)"
+]

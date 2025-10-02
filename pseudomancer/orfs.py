@@ -10,13 +10,24 @@ from typing import Optional, Tuple
 
 
 def parse_getorf_header(header: str) -> Optional[dict]:
-    """
-    Parse getorf FASTA header to extract coordinates.
+    """Parse getorf FASTA header to extract coordinates.
 
     Example headers:
     Forward: >NC_002677.1_1 [93 - 272] Mycobacterium leprae TN, complete sequence
     Reverse: >NC_002677.1_53466 [1611 - 1420] (REVERSE SENSE) Mycobacterium leprae TN, complete sequence
+
+    Parameters
+    ----------
+    header : str
+        FASTA header line (without the leading '>')
+
+    Returns
+    -------
+    Optional[dict]
+        Dictionary with keys: seq_id, orf_num, start, end, strand, frame, length
+        or None if parsing fails
     """
+
     match = re.match(r"^(.+)_(\d+)", header)
     if not match:
         return None
@@ -53,7 +64,16 @@ def parse_getorf_header(header: str) -> Optional[dict]:
 
 
 def convert_fasta_to_gff(fasta_file: str, gff_file: str) -> None:
-    """Convert getorf FASTA output to GFF format."""
+    """Convert getorf FASTA output to GFF format.
+    
+    Parameters
+    ----------
+    fasta_file : str
+        Path to getorf FASTA file
+    gff_file : str
+        Path to output GFF file
+    """
+
     print(f"Converting {fasta_file} to GFF format...")
 
     gff_lines = ["##gff-version 3"]
@@ -100,8 +120,7 @@ def convert_fasta_to_gff(fasta_file: str, gff_file: str) -> None:
 
 
 def identify_orfs(genome_file: str, output_dir: str, minsize: int = 90, table: int = 11) -> Tuple[str, str]:
-    """
-    Identify open reading frames (ORFs) in the genome using getorf.
+    """Identify open reading frames (ORFs) in the genome using getorf.
 
     Parameters
     ----------
@@ -119,6 +138,7 @@ def identify_orfs(genome_file: str, output_dir: str, minsize: int = 90, table: i
     Tuple[str, str]
         Paths to ORF sequences file and GFF file
     """
+    
     base_name = os.path.splitext(os.path.basename(genome_file))[0]
     orf_file = os.path.join(output_dir, f"{base_name}_orfs.fasta")
     gff_file = os.path.join(output_dir, f"{base_name}_orfs.gff")

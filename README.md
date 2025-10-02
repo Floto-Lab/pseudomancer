@@ -42,3 +42,17 @@ python -m pseudomancer --taxon Mycobacterium --genome target_genome.fasta --out_
 4. Optionally: Clusters proteins at 99% identity using mmseqs2 to create a non-redundant dataset
 5. Searches the (clustered or unclustered) proteins against your target genome using mmseqs2 (tblastn-like search)
 6. Outputs results in tabular format with alignment statistics
+
+## Documentation
+
+```bash
+cd docs
+
+# Create the html documentation
+make html
+```
+
+The HTML will be available in docs/build/html/index.html.
+
+You can also view the latest online documentation here:
+https://floto-lab.github.io/pseudomancer/

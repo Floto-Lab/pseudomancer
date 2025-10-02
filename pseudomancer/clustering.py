@@ -8,8 +8,7 @@ import os
 
 
 def cluster_proteins_mmseqs2(protein_file: str, output_dir: str, identity: float = 0.99) -> str:
-    """
-    Cluster proteins using mmseqs2 at specified identity threshold.
+    """Cluster proteins using mmseqs2 at specified identity threshold.
     
     Parameters
     ----------
@@ -25,6 +24,7 @@ def cluster_proteins_mmseqs2(protein_file: str, output_dir: str, identity: float
     str
         Path to representative sequences FASTA file
     """
+
     base_name = os.path.splitext(os.path.basename(protein_file))[0]
     output_prefix = os.path.join(output_dir, f"{base_name}_clustered")
     

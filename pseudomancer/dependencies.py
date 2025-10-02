@@ -8,6 +8,7 @@ import sys
 
 def check_dependencies():
     """Check if required dependencies (mmseqs2, datasets, getorf) are available."""
+    
     dependencies = ["mmseqs", "datasets", "getorf"]
     missing = []
     
