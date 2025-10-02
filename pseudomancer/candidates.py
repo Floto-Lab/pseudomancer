@@ -10,7 +10,19 @@ from collections import defaultdict
 
 
 def get_genome_info(genome_file: str) -> Tuple[str, int]:
-    """Extract sequence ID and length from genome FASTA file."""
+    """Extract sequence ID and length from genome FASTA file.
+    
+    Parameters
+    ----------
+    genome_file : str
+        Path to the genome FASTA file.
+
+    Returns
+    -------
+    Tuple[str, int]
+        A tuple containing the sequence ID and the total length of the genome.
+    """
+
     with open(genome_file, "r") as f:
         for line in f:
             if line.startswith(">"):
@@ -31,17 +43,65 @@ def get_genome_info(genome_file: str) -> Tuple[str, int]:
 
 
 def calculate_distance(start1: int, end1: int, start2: int, end2: int) -> int:
-    """Calculate distance between two genomic regions."""
+    """Calculate distance between two genomic regions.
+
+    Parameters
+    ----------
+    start1 : int
+        Start position of the first region.
+    end1 : int
+        End position of the first region.
+    start2 : int
+        Start position of the second region.
+    end2 : int
+        End position of the second region.
+
+    Returns
+    -------
+    int
+        Distance between the two regions. Returns 0 if they overlap.
+    """
+
     return max(0, max(min(start1, end1), min(start2, end2)) - min(max(start1, end1), max(start2, end2)))
 
 
 def are_adjacent(start1: int, end1: int, start2: int, end2: int, max_distance: int = 100) -> bool:
-    """Check if two genomic regions are adjacent within max_distance."""
+    """Check if two genomic regions are adjacent within max_distance.
+
+    Parameters
+    ----------
+    start1 : int
+        Start position of the first region.
+    end1 : int
+        End position of the first region.
+    start2 : int
+        Start position of the second region.
+    end2 : int
+        End position of the second region.
+
+    max_distance : int, optional
+        Maximum distance to consider regions as adjacent, by default 100.
+    """
+
     return calculate_distance(start1, end1, start2, end2) <= max_distance
 
 
 def group_adjacent_hits(hits_df: pd.DataFrame, max_distance: int = 100) -> pd.DataFrame:
-    """Group adjacent hits within max_distance."""
+    """Group adjacent hits within max_distance.
+
+    Parameters
+    ----------
+    hits_df : pd.DataFrame
+        DataFrame containing hits with 'tstart' and 'tend' columns.
+    max_distance : int, optional
+        Maximum distance to consider hits as adjacent, by default 100.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame with an additional 'cluster' column indicating cluster membership.
+    """
+
     if len(hits_df) == 0:
         return hits_df
 
@@ -89,7 +149,25 @@ def group_adjacent_hits(hits_df: pd.DataFrame, max_distance: int = 100) -> pd.Da
 def create_cluster_summary(
     cluster_hits: pd.DataFrame, query_name: str, event_type: str, strand_name: str
 ) -> Dict[str, Any]:
-    """Create summary for a cluster of hits."""
+    """Create summary for a cluster of hits.
+    
+    Parameters
+    ----------
+    cluster_hits : pd.DataFrame
+        DataFrame containing hits in the cluster.
+    query_name : str
+        Name of the query protein.
+    event_type : str
+        Type of event ("frameshift" or "nonsense").
+    strand_name : str
+        Strand name ("forward" or "reverse").
+
+    Returns
+    -------
+    Dict[str, Any]
+        Dictionary summarizing the cluster.
+    """
+
     # Sort hits by genomic position
     cluster_hits = cluster_hits.sort_values(by=["tstart", "tend"])
 
@@ -137,7 +215,19 @@ def create_cluster_summary(
 
 
 def process_query(query_data: pd.DataFrame) -> List[Dict[str, Any]]:
-    """Process a single query to identify frameshift and nonsense candidates."""
+    """Process a single query to identify frameshift and nonsense candidates.
+
+    Parameters
+    ----------
+    query_data : pd.DataFrame
+        DataFrame containing hits for a single query.
+    
+    Returns
+    -------
+    List[Dict[str, Any]]
+        List of candidate summaries.
+    """
+
     query_name = query_data["query"].iloc[0]
 
     # If only one hit, return empty list
@@ -196,7 +286,21 @@ def process_query(query_data: pd.DataFrame) -> List[Dict[str, Any]]:
 
 
 def cluster_overlapping_candidates(candidates_df: pd.DataFrame, min_overlap: int = 1) -> pd.DataFrame:
-    """Cluster overlapping genomic regions from different query proteins."""
+    """Cluster overlapping genomic regions from different query proteins.
+
+    Parameters
+    ----------
+    candidates_df : pd.DataFrame
+        DataFrame containing candidate summaries.
+    min_overlap : int, optional
+        Minimum overlap in base pairs to consider candidates as overlapping, by default 1.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame with clustered candidates.
+    """
+
     if len(candidates_df) == 0:
         return candidates_df
 
@@ -298,7 +402,18 @@ def cluster_overlapping_candidates(candidates_df: pd.DataFrame, min_overlap: int
 
 
 def export_candidates_to_gff(frameshift_df: pd.DataFrame, output_file: str, genome_file: str) -> None:
-    """Export frameshift candidates to GFF3 format."""
+    """Export frameshift candidates to GFF3 format.
+
+    Parameters
+    ----------
+    frameshift_df : pd.DataFrame
+        DataFrame containing frameshift candidate summaries.
+    output_file : str
+        Path to the output GFF3 file.
+    genome_file : str
+        Path to the genome FASTA file.
+    """
+
     # Get genome information
     seq_id, genome_length = get_genome_info(genome_file)
 
@@ -360,7 +475,23 @@ def export_candidates_to_gff(frameshift_df: pd.DataFrame, output_file: str, geno
 
 
 def process_mmseqs2_results(results_file: str, output_dir: str, genome_file: str) -> str:
-    """Process mmseqs2 results to identify pseudogene candidates and generate GFF."""
+    """Process mmseqs2 results to identify pseudogene candidates and generate GFF.
+
+    Parameters
+    ----------
+    results_file : str
+        Path to the mmseqs2 results TSV file.
+    output_dir : str
+        Directory to save output files.
+    genome_file : str
+        Path to the genome FASTA file.
+
+    Returns
+    -------
+    str
+        Path to the generated GFF file.
+    """
+
     print(f"Processing mmseqs2 results from {results_file}")
 
     # Read mmseqs2 results

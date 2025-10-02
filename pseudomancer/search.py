@@ -7,8 +7,7 @@ import os
 
 
 def run_mmseqs2_search(protein_db: str, genome_file: str, output_dir: str, evalue: float = 1e-5) -> str:
-    """
-    Run mmseqs2 search (tblastn-like) against genome.
+    """Run mmseqs2 search (tblastn-like) against genome.
     
     Parameters
     ----------
@@ -26,6 +25,7 @@ def run_mmseqs2_search(protein_db: str, genome_file: str, output_dir: str, evalu
     str
         Path to search results file
     """
+    
     mmseqs_dir = os.path.join(output_dir, "mmseqs_dbs")
     results_dir = os.path.join(output_dir, "mmseqs_results")
     os.makedirs(mmseqs_dir, exist_ok=True)

@@ -18,3 +18,7 @@ dependencies:
   - pip
   - pip:
     - -e .
+    - sphinx
+    - myst-parser
+    - furo
+    - sphinx-autodoc-typehints

@@ -8,7 +8,19 @@ from typing import List, Dict, Any
 
 
 def parse_gff_attributes(attr_string: str) -> Dict[str, str]:
-    """Parse GFF attributes string into a dictionary."""
+    """Parse GFF attributes string into a dictionary.
+
+    Parameters
+    ----------
+    attr_string : str
+        GFF attributes string (9th column)
+    
+    Returns
+    -------
+    Dict[str, str]
+        Dictionary of attribute key-value pairs
+    """
+
     attributes = {}
     
     # Handle hit_details specially since it contains semicolons
@@ -49,7 +61,19 @@ def parse_gff_attributes(attr_string: str) -> Dict[str, str]:
 
 
 def parse_hit_details(hit_details: str) -> List[Dict[str, Any]]:
-    """Parse hit_details string to extract individual hit information."""
+    """Parse hit_details string to extract individual hit information.
+    
+    Parameters
+    ----------
+    hit_details : str
+        hit_details attribute string from GFF
+    
+    Returns
+    -------
+    List[Dict[str, Any]]
+        List of hits with keys: q_coords, t_start, t_end, frame, strand
+    """
+
     hits = []
     for hit in hit_details.split(";"):
         if not hit.strip():
@@ -95,7 +119,21 @@ def parse_hit_details(hit_details: str) -> List[Dict[str, Any]]:
 
 
 def find_overlapping_orfs(hit: Dict[str, Any], orfs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """Find ORFs that overlap with a hit in the same strand and frame."""
+    """Find ORFs that overlap with a hit in the same strand and frame.
+    
+    Parameters
+    ----------
+    hit : Dict[str, Any]
+        Hit information with keys: t_start, t_end, frame, strand
+    orfs : List[Dict[str, Any]]
+        List of ORFs with keys: start, end, strand, frame
+
+    Returns
+    -------
+    List[Dict[str, Any]]
+        List of overlapping ORFs with overlap details
+    """
+
     overlapping = []
     
     hit_start = min(hit["t_start"], hit["t_end"])
@@ -126,7 +164,19 @@ def find_overlapping_orfs(hit: Dict[str, Any], orfs: List[Dict[str, Any]]) -> Li
 
 
 def parse_getorf_gff(getorf_gff: str) -> List[Dict[str, Any]]:
-    """Parse getorf GFF output to extract ORF information."""
+    """Parse getorf GFF output to extract ORF information.
+
+    Parameters
+    ----------
+    getorf_gff : str
+        Path to getorf GFF file
+    
+    Returns
+    -------
+    List[Dict[str, Any]]
+        List of ORFs with keys: orf_id, seqid, start, end,
+    """
+
     orfs = []
     
     with open(getorf_gff, "r") as f:
@@ -179,7 +229,23 @@ def parse_getorf_gff(getorf_gff: str) -> List[Dict[str, Any]]:
 
 
 def overlap_with_getorf(pseudogene_gff: str, getorf_gff: str, output_dir: str) -> str:
-    """Find overlapping ORFs for pseudogene candidates."""
+    """Find overlapping ORFs for pseudogene candidates.
+    
+    Parameters
+    ----------
+    pseudogene_gff : str
+        Path to pseudogene candidate GFF file
+    getorf_gff : str
+        Path to getorf GFF file
+    output_dir : str
+        Directory to store output TSV file
+
+    Returns
+    -------
+    str
+        Path to the output TSV file with overlap results
+    """
+
     print(f"Finding ORF overlaps between {pseudogene_gff} and {getorf_gff}")
     
     # Parse getorf ORFs
